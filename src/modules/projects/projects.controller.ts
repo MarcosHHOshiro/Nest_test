@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ProjectRequestDTO } from './projects.dto';
 import { ProjectsService } from './projects.service';
 
@@ -15,8 +26,12 @@ export class ProjectsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.projectsService.findById(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    const project = await this.projectsService.findById(id);
+    if (!project) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+    }
+    return project;
   }
 
   @Post()
@@ -25,12 +40,20 @@ export class ProjectsController {
   }
 
   @Put(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDTO) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDTO) {
+    const project = await this.projectsService.findById(id);
+    if (!project) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+    }
     return this.projectsService.update(id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    const project = await this.projectsService.findById(id);
+    if (!project) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+    }
     return this.projectsService.remove(id);
   }
 }
