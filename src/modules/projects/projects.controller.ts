@@ -10,7 +10,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ProjectRequestDTO } from './projects.dto';
+import { ApiResponse } from '@nestjs/swagger';
+import { ProjectListItemDTO, ProjectRequestDTO } from './projects.dto';
 import { ProjectsService } from './projects.service';
 
 @Controller({
@@ -21,6 +22,9 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
+  @ApiResponse({
+    type: [ProjectListItemDTO],
+  })
   findAll() {
     return this.projectsService.findAll();
   }
@@ -35,6 +39,9 @@ export class ProjectsController {
   }
 
   @Post()
+  @ApiResponse({
+    type: [ProjectListItemDTO],
+  })
   create(@Body() data: ProjectRequestDTO) {
     return this.projectsService.create(data);
   }
