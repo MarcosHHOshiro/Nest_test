@@ -22,7 +22,13 @@ export class ProjectsService {
     return this.prisma.project.update({ where: { id }, data });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.prisma.task.deleteMany({
+      where: {
+        projectId: id,
+      },
+    });
+
     return this.prisma.project.delete({ where: { id } });
   }
 }
