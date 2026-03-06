@@ -45,6 +45,21 @@ export class ValidateResourcesIdInterceptor implements NestInterceptor {
       throw new NotFoundException('Project not found');
     }
 
+    //Validar o taskId da Url, caso exista
+    const taskId = request.params.taskId;
+    if (taskId) {
+      const task = await this.prisma.task.findFirst({
+        where: {
+          id: taskId,
+          projectId: projectId,
+        },
+      });
+
+      if (!task) {
+        throw new NotFoundException('Task not found');
+      }
+    }
+
     return next.handle();
   }
 }
