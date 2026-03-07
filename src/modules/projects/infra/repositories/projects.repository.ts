@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { ProjectRequestDTO } from './projects.dto';
+import { PrismaService } from 'src/core/database/prisma/prisma.service';
+import { ProjectRequestDTO } from '../../dto/projects.dto';
 
 @Injectable()
-export class ProjectsService {
+export class ProjectsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll() {

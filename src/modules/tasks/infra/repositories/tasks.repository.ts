@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { TaskDTO } from './tasks.dto';
+import { PrismaService } from 'src/core/database/prisma/prisma.service';
+import { TaskDTO } from '../../dto/tasks.dto';
 
 @Injectable()
-export class TasksService {
+export class TasksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllByProjectId(projectId: string) {
+  findAllByProjectId(projectId: string) {
     return this.prisma.task.findMany({
       where: {
         projectId,
@@ -14,7 +14,7 @@ export class TasksService {
     });
   }
 
-  async findById(projectId: string, id: string) {
+  findById(projectId: string, id: string) {
     return this.prisma.task.findUnique({
       where: {
         projectId,
@@ -23,7 +23,7 @@ export class TasksService {
     });
   }
 
-  async create(projectId: string, data: TaskDTO) {
+  create(projectId: string, data: TaskDTO) {
     return this.prisma.task.create({
       data: {
         ...data,
@@ -32,7 +32,7 @@ export class TasksService {
     });
   }
 
-  async update(projectId: string, id: string, data: TaskDTO) {
+  update(projectId: string, id: string, data: TaskDTO) {
     return this.prisma.task.update({
       where: {
         projectId,
@@ -42,7 +42,7 @@ export class TasksService {
     });
   }
 
-  async delete(projectId: string, id: string) {
+  delete(projectId: string, id: string) {
     return this.prisma.task.delete({
       where: {
         projectId,

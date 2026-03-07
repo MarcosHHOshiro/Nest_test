@@ -12,10 +12,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { ValidateResourcesIds } from 'src/commun/decorators/validate-resources-ids.decorator';
-import { ValidateResourcesIdInterceptor } from 'src/commun/interceptors/validate-resources-id.interceptor';
-import { ProjectListItemDTO, ProjectRequestDTO } from './projects.dto';
-import { ProjectsService } from './projects.service';
+import { ValidateResourcesIds } from 'src/core/common/decorators/validate-resources-ids.decorator';
+import { ValidateResourcesIdInterceptor } from 'src/core/common/interceptors/validate-resources-id.interceptor';
+import {
+  ProjectListItemDTO,
+  ProjectRequestDTO,
+} from '../../dto/projects.dto';
+import { ProjectsService } from '../../application/use-cases/projects.use-case';
 
 @Controller({
   version: '1',

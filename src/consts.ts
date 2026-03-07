@@ -1,1 +1,1 @@
-export const VAlIDATE_RESOURCES_IDS_KEY = 'validate-resources-ids';
+export { VALIDATE_RESOURCES_IDS_KEY } from './core/common/constants/validate-resources-ids.constant';

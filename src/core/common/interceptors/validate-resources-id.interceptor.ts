@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { VAlIDATE_RESOURCES_IDS_KEY } from 'src/consts';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../../database/prisma/prisma.service';
+import { VALIDATE_RESOURCES_IDS_KEY } from '../constants/validate-resources-ids.constant';
 
 @Injectable()
 export class ValidateResourcesIdInterceptor implements NestInterceptor {
@@ -21,9 +21,8 @@ export class ValidateResourcesIdInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler,
   ): Promise<Observable<Request>> {
-    //Validar se o endpoint tem o decorator @ValidateResourcesIds
     const shouldValidate = this.reflector.get<boolean>(
-      VAlIDATE_RESOURCES_IDS_KEY,
+      VALIDATE_RESOURCES_IDS_KEY,
       context.getHandler(),
     );
 
@@ -31,7 +30,6 @@ export class ValidateResourcesIdInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    //Validar o projectId da Url
     const request = context.switchToHttp().getRequest();
     const projectId = request.params.projectId;
 
@@ -45,13 +43,12 @@ export class ValidateResourcesIdInterceptor implements NestInterceptor {
       throw new NotFoundException('Project not found');
     }
 
-    //Validar o taskId da Url, caso exista
     const taskId = request.params.taskId;
     if (taskId) {
       const task = await this.prisma.task.findFirst({
         where: {
           id: taskId,
-          projectId: projectId,
+          projectId,
         },
       });
 

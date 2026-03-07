@@ -11,10 +11,10 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-import { ValidateResourcesIds } from 'src/commun/decorators/validate-resources-ids.decorator';
-import { ValidateResourcesIdInterceptor } from 'src/commun/interceptors/validate-resources-id.interceptor';
-import { TaskDTO } from './tasks.dto';
-import { TasksService } from './tasks.service';
+import { ValidateResourcesIds } from 'src/core/common/decorators/validate-resources-ids.decorator';
+import { ValidateResourcesIdInterceptor } from 'src/core/common/interceptors/validate-resources-id.interceptor';
+import { TaskDTO } from '../../dto/tasks.dto';
+import { TasksService } from '../../application/use-cases/tasks.use-case';
 
 @Controller({
   version: '1',
