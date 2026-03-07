@@ -11,7 +11,28 @@ export class ProjectsService {
   }
 
   findById(id: string) {
-    return this.prisma.project.findFirst({ where: { id } });
+    return this.prisma.project.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        tasks: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            status: true,
+            priority: true,
+            dueDate: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    });
   }
 
   create(data: ProjectRequestDTO) {

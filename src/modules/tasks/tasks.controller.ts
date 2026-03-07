@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ValidateResourcesIds } from 'src/commun/decorators/validate-resources-ids.decorator';
-import { ValidateResourcesIdInterceptor } from 'src/interceptors/validate-resources-id.interceptor';
+import { ValidateResourcesIdInterceptor } from 'src/commun/interceptors/validate-resources-id.interceptor';
 import { TaskDTO } from './tasks.dto';
 import { TasksService } from './tasks.service';
 
