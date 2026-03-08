@@ -11,7 +11,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { ProjectsService } from '../../application/projects.service';
+import { CreateProjectUseCase } from '../../application/use-cases/create-project.use-case';
+import { DeleteProjectUseCase } from '../../application/use-cases/delete-project.use-case';
+import { FindProjectUseCase } from '../../application/use-cases/find-project.use-case';
+import { ListProjectsUseCase } from '../../application/use-cases/list-projects.use-case';
+import { UpdateProjectUseCase } from '../../application/use-cases/update-project.use-case';
 import { ProjectListItemDTO, ProjectRequestDTO } from '../../dto/projects.dto';
 
 @Controller({
@@ -19,24 +23,28 @@ import { ProjectListItemDTO, ProjectRequestDTO } from '../../dto/projects.dto';
   path: 'projects',
 })
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(
+    private readonly createProjectUseCase: CreateProjectUseCase,
+    private readonly updateProjectUseCase: UpdateProjectUseCase,
+    private readonly deleteProjectUseCase: DeleteProjectUseCase,
+    private readonly findProjectUseCase: FindProjectUseCase,
+    private readonly listProjectsUseCase: ListProjectsUseCase,
+  ) {}
 
   @Get()
   @ApiResponse({
     type: [ProjectListItemDTO],
   })
   findAll() {
-    return this.projectsService.findAll();
+    return this.listProjectsUseCase.execute();
   }
 
   @Get(':projectId')
   @ApiResponse({
     type: ProjectListItemDTO,
   })
-  async findOne(@Param('projectId', ParseUUIDPipe) projectId: string) {
-    const project = await this.projectsService.findById(projectId);
-
-    return project;
+  findOne(@Param('projectId', ParseUUIDPipe) projectId: string) {
+    return this.findProjectUseCase.execute(projectId);
   }
 
   @Post()
@@ -44,20 +52,20 @@ export class ProjectsController {
     type: [ProjectListItemDTO],
   })
   create(@Body() data: ProjectRequestDTO) {
-    return this.projectsService.create(data);
+    return this.createProjectUseCase.execute(data);
   }
 
   @Put(':projectId')
-  async update(
+  update(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Body() data: ProjectRequestDTO,
   ) {
-    return this.projectsService.update(projectId, data);
+    return this.updateProjectUseCase.execute(projectId, data);
   }
 
   @Delete(':projectId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('projectId', ParseUUIDPipe) projectId: string) {
-    return this.projectsService.remove(projectId);
+  remove(@Param('projectId', ParseUUIDPipe) projectId: string) {
+    return this.deleteProjectUseCase.execute(projectId);
   }
 }
