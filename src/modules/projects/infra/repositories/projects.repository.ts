@@ -6,6 +6,15 @@ import { ProjectRequestDTO } from '../../dto/projects.dto';
 export class ProjectsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async existsById(id: string) {
+    const project = await this.prisma.project.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    return !!project;
+  }
+
   findAll() {
     return this.prisma.project.findMany();
   }
